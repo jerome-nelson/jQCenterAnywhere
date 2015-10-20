@@ -1,28 +1,14 @@
 /**
  * Created by Jerome on 17/10/2015.
  */
-//TODO: Look into stopping plugin from running until page is loaded
-//TODO: (use attribute to allow/disallow)
+//TODO: Look into stopping plugin from running until page is loaded (use attribute to allow/disallow)
 (function($) {
     $.fn.centered = function(options) {
 
-        var settings,coords,posalign,getpos,finalpos,elemcoords,totwidth,totheight;
+        var settings,coords,posalign,getpos,finalpos,elemcoords,totwidth,totheight,num;
+        settings = $.extend({}, $.fn.centered.defaults, options);
 
-        settings = $.extend({
-
-            //Element to center (can contain anything)
-            //Find way to refer to element without using hard string
-            elem: $('.loading'),
-            position: 'bottom',
-            offsetX: '', //horizontal movement
-            offsetY: '', //Vertical Movement
-            offsetScope: $(this),//Default is targeted element but will take any other selector
-            callback: ''
-        }, options);
-
-
-        //Positioning Alignment Array
-        //TODO: use existing js positioning properties if exist
+        //TODO: Remove dependency on this (find assoc js function or native CS attribute names)
         posalign = ['top','topLeft','topRight','topCenter','center','centerLeft','centerRight','bottom','bottomLeft','bottomRight','bottomCenter'];
 
         //We get the Prototype of Jquery selector and elem with [0]
@@ -30,19 +16,13 @@
         elemcoords = settings.elem[0].getBoundingClientRect();
 
         //Array containing all positioning co-ords for selector. We manipulate to get final results
-        finalpos = [coords.top,coords.bottom,coords.left,coords.right];
-
         //If outerHeight matches current height and width then there is no extra padding,borders,margins to worry about
-        if(parseInt(coords.height,10) !== $(this).outerHeight(true)) {totheight = ($(this).outerHeight(true) - parseInt(coords.height,10))/2;}
-        else { totheight = '0';}
+        finalpos = [coords.top,coords.bottom,coords.left,coords.right];
+        totheight = $.fn.centered.checkdimension(parseInt(coords.height,10), $(this).outerHeight(true));
+        totwidth = $.fn.centered.checkdimension(parseInt(coords.width,10), $(this).outerWidth(true));
 
-        //Now same for outerWidth
-        if(parseInt(coords.width,10) !== $(this).outerWidth(true)) { totwidth = ($(this).outerWidth(true) - parseInt(coords.width,10))/2;}
-        else { totwidth = '0';}
 
         //TODO: Group attributes better to remove DRY violation
-        //TODO: (maybe use case's: multiple times in switch statement) - TRIED (WORKS IN CHROME BUT NOT VALID)
-
         //Get key (array position) for position setting (we use for switch)
         getpos = posalign.lastIndexOf(settings.position);
 
@@ -139,16 +119,78 @@
         }
 
 
-
         //We use this to centerally position var elem onto var targetelem
         return this.each(function() {
             settings.elem.css({
                 position: 'absolute',
-                top: finalpos[0],
-                left: finalpos[2],
+                top:   $.fn.centered.offsetCalc(settings.offsetX,finalpos[0]),
+                left: $.fn.centered.offsetCalc(settings.offsetY,finalpos[2]),
                 right: finalpos[3],
                 bottom: finalpos[1]
             });
         });
     };
+
+    //Allows users to access options as needed (probably not needed just testing)
+    $.fn.centered.defaults = {
+        elem: $('.loading'), //Element to move
+        position: 'bottom', //Position to give
+        offsetX: '', //horizontal movement
+        offsetY: '', //Vertical Movement
+        //TODO: Once code is tidier (offsetScope - allowing person to pick element to base offset calcs off).
+        triggerOn: function() {}, //When to trigger movement
+        callback: function() {} //What to trigger when movement is done
+
+    };
+
+
+    $.fn.centered.checkdimension = function(ladimension,laelem) {
+
+        var result;
+
+        if(ladimension !== laelem) {
+                result = (laelem - ladimension)/2;
+        }
+        else {
+            result = '0';
+        }
+
+        return result;
+
+    };
+    
+    
+    $.fn.centered.offsetCalc = function(offsetType,compareType) {
+
+        var calc;
+
+        if(offsetType.indexOf('px') >= 0 || offsetType.indexOf('%') >= 0){
+            num = parseInt(offsetType);
+
+            //indexOf will return -1 if result is false
+            if(num < 0) {
+                num *= -1;
+                if(offsetType.indexOf('%') >= 0) {
+                    calc = compareType - (compareType/100*num);
+                }
+                else {
+                    calc = (parseInt(compareType) + parseInt(offsetType)+'px');
+                }
+            }
+            else {
+                if (offsetType.indexOf('%') >= 0) {
+                    calc = compareType + (compareType / 100 * num);
+                }
+                else {
+                    calc = (parseInt(compareType) + parseInt(offsetType)+'px');
+                }
+
+            }
+        }
+        else {
+            return compareType;
+        }
+        
+        return calc;
+    }
 }(jQuery));
