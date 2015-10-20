@@ -2,13 +2,18 @@
 <html>
 <head lang="en">
     <meta charset="UTF-8">
-    <title>JqCentered - Testing</title>
+    <title>JqCentered - La Prueba Uno</title>
     <script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
     <script src="../center.jq.js"></script>
     <script>
         $(document).ready(function() {
             $('.padre').centered({
-                elem: $('.nino')
+                elem: $('.nino'),
+                position: 'centerRight'
+            });
+            $('.madre').centered({
+                elem: $('.nina'),
+                position: 'topLeft'
             });
         });
     </script>
@@ -16,16 +21,17 @@
         * {
             box-sizing: content-box;
         }
-        .padre,.nino {
+        .padre,.nino,.madre,.nina {
             display: block;
             overflow: hidden;
         }
-        .padre {
+        .padre,.madre {
             background: red;
             width: 90%;
-            margin: 0 auto;
+            height: 150px;
+            margin: 10px auto;
         }
-        .nino {
+        .nino,.nina {
             border-radius(50%);
             background: orange;
             height: 90px;
@@ -36,5 +42,7 @@
 <body>
     <span class="padre">Me llamo los Padre</span>
     <span class="nino">Me llamo les nino</span>
+    <span class="madre">Me llamo las Madre</span>
+    <span class="nina">Me llamo las nina</span>
 </body>
 </html>
