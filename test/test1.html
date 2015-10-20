@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>JqCentered - Testing</title>
+    <script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
+    <script src="../center.jq.js"></script>
+    <script>
+        $(document).ready(function() {
+            $('.padre').centered({
+                elem: $('.nino')
+            });
+        });
+    </script>
+    <style>
+        * {
+            box-sizing: content-box;
+        }
+        .padre,.nino {
+            display: block;
+            overflow: hidden;
+        }
+        .padre {
+            background: red;
+            width: 90%;
+            margin: 0 auto;
+        }
+        .nino {
+            border-radius(50%);
+            background: orange;
+            height: 90px;
+            width: 90px;
+        }
+    </style>
+</head>
+<body>
+    <span class="padre">Me llamo los Padre</span>
+    <span class="nino">Me llamo les nino</span>
+</body>
+</html>
