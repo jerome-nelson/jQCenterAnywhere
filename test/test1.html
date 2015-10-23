@@ -12,12 +12,36 @@
                 position: 'centerRight',
                 offsetX: '40%'
             });
-            $('.madre').centered({
+            $('form').centered({
                 elem: $('.nina'),
                 position: 'topLeft',
                 offsetX: '50%',
-                offsetY: '-10%'
+                offsetY: '-10%',
+                onStart: 'submit',
+                onComplete: ''
             });
+
+            $('.myAwesomeButton').centered({
+                elem: $('.nina'),
+                position: 'topLeft',
+                offsetX: '50%',
+                offsetY: '-10%',
+                onStart: 'click',
+                onComplete: ''
+            });
+
+            $('.myModal').centered({
+                elem: $('.nina'),
+                position: 'topLeft',
+                offsetX: '50%',
+                offsetY: '-10%',
+                onStart: 'show',
+                onComplete: ''
+            });
+
+
+
+
         });
     </script>
     <style>
@@ -43,9 +67,9 @@
     </style>
 </head>
 <body>
-    <span class="padre">Me llamo los Padre</span>
-    <span class="nino">Me llamo les nino</span>
-    <span class="madre">Me llamo las Madre</span>
-    <span class="nina">Me llamo las nina</span>
+    <span class="padre">Yo soy el Padre</span>
+    <span class="nino">Yo soy el nino</span>
+    <span class="madre">Yo soy es Madre</span>
+    <span class="nina">Yo soy es nina</span>
 </body>
 </html>
